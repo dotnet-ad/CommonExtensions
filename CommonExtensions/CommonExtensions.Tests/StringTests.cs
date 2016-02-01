@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace CommonExtensions.Tests
 {
@@ -47,6 +48,27 @@ namespace CommonExtensions.Tests
 	        {
                 Assert.IsTrue(extractedEmails.Contains(email));
 	        }
+        }
+
+        #endregion
+
+        #region Mimes
+
+        private static readonly Dictionary<string, string> ExpectedMimes = new Dictionary<string, string>()
+        {
+            { "test.csv", "text/csv"},
+            { "./okay/test.css", "text/css"},
+            { "test", "application/octet-stream"},
+            { "./test.notsupported", "application/octet-stream"},
+        };
+
+        [TestMethod]
+        public void GetMimeType()
+        {
+            foreach (var pair in ExpectedMimes)
+            {
+                Assert.IsTrue(pair.Value == pair.Key.GetMimeType());
+            }
         }
 
         #endregion

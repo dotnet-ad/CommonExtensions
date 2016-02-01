@@ -101,7 +101,6 @@ using System.Threading.Tasks;
             // Application
             
             { "pdf", "application/pdf"},
-            { "html", "application/xhtml+xml"},
             { "json", "application/json"},
             { "xml", "application/xml"},
             { "zip", "application/zip"},
