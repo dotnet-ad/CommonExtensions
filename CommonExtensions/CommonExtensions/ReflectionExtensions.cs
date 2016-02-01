@@ -60,7 +60,9 @@ namespace CommonExtensions
         /// <returns></returns>
         public static string GetPropertyName<T>(this object owner, Expression<Func<T>> property)
         {
-            return property.Name;
+            var body = property.Body as MemberExpression;
+            var info = body.Member as PropertyInfo;
+            return info.Name;
         }
 
         #endregion
