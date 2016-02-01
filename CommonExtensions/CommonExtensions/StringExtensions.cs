@@ -4,11 +4,12 @@
 namespace CommonExtensions
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
     /// <summary>
     /// All extensions on string.
@@ -53,6 +54,90 @@ namespace CommonExtensions
         {
             Regex rx = new Regex(EmailPattern, RegexOptions.IgnoreCase);
             return rx.Matches(text).Cast<Match>().Select((m) => m.Value.ToString());
+        }
+
+        #endregion
+
+        #region Mimes types
+
+        /// <summary>
+        /// Default MIME type for a resource.
+        /// </summary>
+        private const string DefaultMimeType = "application/octet-stream";
+
+        /// <summary>
+        /// Mapping from file extensions to corresponding MIME types.
+        /// </summary>
+        private static readonly Dictionary<string, string> FileExtensionsMimes = new Dictionary<string, string>()
+        {
+            // Text
+            { "css", "text/css"},
+            { "csv", "text/csv"},
+            { "html", "text/html"},
+            { "htm", "text/html"},
+            { "txt", "text/plain"},
+
+            // Image
+
+            { "jpg", "image/jpeg"},
+            { "jpeg", "image/jpeg"},
+            { "bmp", "image/bmp"},
+            { "png", "image/png"},
+            { "gif", "image/gif"},
+            { "tiff", "image/tiff"},
+            { "tif", "image/tiff"},
+
+            // Audio
+            
+            { "mp3", "audio/mpeg"},
+            { "wav", "audio/x-wav"},
+            { "wma", "audio/x-ms-wma"},
+
+            // Video
+            
+            { "mp4", "video/mp4" },
+            { "wmv", "video/x-ms-wmv"},
+
+            // Application
+            
+            { "pdf", "application/pdf"},
+            { "html", "application/xhtml+xml"},
+            { "json", "application/json"},
+            { "xml", "application/xml"},
+            { "zip", "application/zip"},
+            { "ogg", "application/ogg"},
+            { "js", "application/javascript"},
+
+            // Office
+            
+            { "xls", "application/vnd.ms-excel"},
+            { "ppt", "application/vnd.ms-powerpoint"},
+            { "doc", "application/msword"},
+            { "xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
+            { "pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"},
+            { "docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+        };
+
+        /// <summary>
+        /// Returns the MIME type associated to a file path (based on its extension).
+        /// </summary>
+        /// <param name="path">The path to the file</param>
+        /// <returns>The MIME type if found, else a default one.</returns>
+        public static string GetMimeType(this string path)
+        {
+            var ext = Path.GetExtension(path);
+
+            if(!String.IsNullOrEmpty(ext))
+            {
+                ext = ext.TrimStart('.');
+
+                if(FileExtensionsMimes.ContainsKey(ext))
+                {
+                    return FileExtensionsMimes[ext];
+                }
+            }
+
+            return DefaultMimeType;
         }
 
         #endregion
